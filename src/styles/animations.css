@@ -1,0 +1,455 @@
+/* Modern Animation Library for Cinema App */
+
+/* Fade In animations with different speeds */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.fade-in-slow {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.fade-in-fast {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* Slide animations */
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation: slideInUp 0.5s ease forwards;
+}
+
+.slide-left {
+  animation: slideInLeft 0.5s ease forwards;
+}
+
+.slide-right {
+  animation: slideInRight 0.5s ease forwards;
+}
+
+/* Smooth slide up and fade in animation */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up-fade {
+  animation: slideUpFade 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+}
+
+/* Staggered animations for lists */
+.stagger-item {
+  opacity: 0;
+}
+
+.stagger-item:nth-child(1) {
+  animation: slideInUp 0.4s 0.1s ease forwards;
+}
+.stagger-item:nth-child(2) {
+  animation: slideInUp 0.4s 0.2s ease forwards;
+}
+.stagger-item:nth-child(3) {
+  animation: slideInUp 0.4s 0.3s ease forwards;
+}
+.stagger-item:nth-child(4) {
+  animation: slideInUp 0.4s 0.4s ease forwards;
+}
+.stagger-item:nth-child(5) {
+  animation: slideInUp 0.4s 0.5s ease forwards;
+}
+.stagger-item:nth-child(6) {
+  animation: slideInUp 0.4s 0.6s ease forwards;
+}
+.stagger-item:nth-child(7) {
+  animation: slideInUp 0.4s 0.7s ease forwards;
+}
+.stagger-item:nth-child(8) {
+  animation: slideInUp 0.4s 0.8s ease forwards;
+}
+
+/* Scale animations */
+@keyframes scaleUp {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.scale-up {
+  animation: scaleUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+/* Pulse animation */
+@keyframes pulsate {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse {
+  animation: pulsate 2s infinite ease-in-out;
+}
+
+/* Shimmer effect for skeleton loading */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #2a2a2a 0%, #3a3a3a 50%, #2a2a2a 100%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+/* Shimmer animation for buttons */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Floating animation for particle effects */
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-10px) translateX(10px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}
+
+/* Shine effect animation */
+@keyframes shine {
+  0% {
+    left: -100%;
+    transition-property: left;
+  }
+  100% {
+    left: 100%;
+    transition-property: left;
+  }
+}
+
+.animate-shine {
+  animation: shine 1.5s infinite;
+}
+
+/* Moving light animation for subtle background effect */
+@keyframes moveLight {
+  0% {
+    transform: translateX(-10%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(2000px);
+    opacity: 0;
+  }
+}
+
+/* 3D Tilt effect helpers */
+.tilt-container {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* Motion blur for fast animations */
+.motion-blur {
+  filter: blur(4px);
+  transition: filter 100ms;
+}
+
+.motion-blur-none {
+  filter: blur(0);
+}
+
+/* Morphing shapes */
+@keyframes morph {
+  0% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  50% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
+  100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+}
+
+.animate-morph {
+  animation: morph 8s ease-in-out infinite;
+}
+
+/* Hover transition classes */
+.hover-float {
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.hover-float:hover {
+  transform: translateY(-8px);
+}
+
+.hover-scale {
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-glow {
+  transition: box-shadow 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.6);
+}
+
+/* 3D effect for cards */
+.card-3d {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.card-3d:hover {
+  transform: rotateY(5deg) translateY(-5px);
+  box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Light sweep animation for cinematic rays */
+@keyframes light-sweep {
+  0% {
+    transform: translateX(-100%) skewX(-20deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(300%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+/* Add noise background for film grain effect */
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* 3D text shadow effect */
+.text-shadow-3d {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3), 2px 2px 2px rgba(0, 0, 0, 0.3),
+    3px 3px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    text-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform, text-shadow;
+}
+
+.text-shadow-3d:hover {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3), 1px 2px 1px rgba(0, 0, 0, 0.3),
+    1px 3px 1px rgba(0, 0, 0, 0.3), 1px 4px 1px rgba(0, 0, 0, 0.3),
+    1px 5px 1px rgba(0, 0, 0, 0.3), 1px 6px 1px rgba(0, 0, 0, 0.3);
+}
+
+/* Button glow effect */
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(229, 9, 20, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(229, 9, 20, 0);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* Slow pulse animation for interactive elements */
+@keyframes pulse-slow {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* Smooth cross-fade animation */
+.duration-800 {
+  transition-duration: 800ms;
+}
+
+.ease-out {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Progress bar animation for slider navigation */
+@keyframes progressBar {
+  0% {
+    left: -5px;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.animate-progressBar {
+  animation: progressBar 8s linear forwards;
+}
+
+/* Enhanced slider navigation dots */
+@keyframes dotPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+.animate-dot-pulse {
+  animation: dotPulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* Better progress animation for dots */
+@keyframes progressBar {
+  0% {
+    width: 0%;
+    opacity: 0.7;
+  }
+  100% {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+.animate-progressBar {
+  animation: progressBar 8s linear forwards;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.7)
+  );
+  border-radius: inherit;
+}
+
+/* Dot ripple effect */
+@keyframes dotRipple {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.animate-dot-ripple {
+  animation: dotRipple 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+// Import animation styles
+import './styles/animations.css';
+
 // Pages
 import HomePage from "./pages/HomePage";
 import MovieDetail from "./pages/MovieDetail";
@@ -29,9 +32,9 @@ function App() {
 
   return (
     <Router>
-      <div className="flex min-h-screen flex-col bg-gray-900 text-white">
+      <div className="flex flex-col min-h-screen text-white bg-gray-900">
         <Navbar />
-        <main className="flex-grow">
+        <main className="flex-grow mt-16 md:mt-20">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/movie/:id" element={<MovieDetail />} />
