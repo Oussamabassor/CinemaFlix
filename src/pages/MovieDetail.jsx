@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getMovieDetails } from "../services/api";
+import {
+  getMovieDetails,
+  getMovieCredits,
+  getMovieVideos,
+} from "../services/api";
 import ImageLoader from "../components/ImageLoader";
 import LoadingSpinner from "../components/LoadingSpinner";
 import TrailerModal from "../components/TrailerModal";
@@ -9,37 +13,32 @@ import MovieCard from "../components/MovieCard";
 const MovieDetail = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
+  const [credits, setCredits] = useState(null);
+  const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
-  const [showTrailer, setShowTrailer] = useState(false);
+  const [trailerOpen, setTrailerOpen] = useState(false);
   const [trailerKey, setTrailerKey] = useState("");
 
   useEffect(() => {
     const fetchMovieData = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        setLoading(true);
-        const data = await getMovieDetails(id);
-        setMovie(data);
+        const [movieData, creditsData, videosData] = await Promise.all([
+          getMovieDetails(id),
+          getMovieCredits(id),
+          getMovieVideos(id),
+        ]);
 
-        // Find trailer or teaser
-        if (data.videos && data.videos.results.length > 0) {
-          const trailer =
-            data.videos.results.find(
-              (video) => video.type === "Trailer" && video.site === "YouTube"
-            ) ||
-            data.videos.results.find(
-              (video) => video.type === "Teaser" && video.site === "YouTube"
-            ) ||
-            data.videos.results[0];
-
-          if (trailer) {
-            setTrailerKey(trailer.key);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching movie details:", error);
-        setError("Failed to load movie details. Please try again later.");
+        setMovie(movieData);
+        setCredits(creditsData);
+        setVideos(videosData.results || []);
+      } catch (err) {
+        console.error("Error fetching movie data:", err);
+        setError("Failed to load movie data. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -49,9 +48,28 @@ const MovieDetail = () => {
     fetchMovieData();
   }, [id]);
 
-  const openTrailer = () => {
-    if (trailerKey) {
-      setShowTrailer(true);
+  const getTrailerKey = () => {
+    const officialTrailer = videos.find(
+      (video) =>
+        video.type === "Trailer" &&
+        video.site === "YouTube" &&
+        video.name.toLowerCase().includes("official")
+    );
+
+    const anyTrailer = videos.find(
+      (video) => video.type === "Trailer" && video.site === "YouTube"
+    );
+
+    const anyVideo = videos.find((video) => video.site === "YouTube");
+
+    return officialTrailer?.key || anyTrailer?.key || anyVideo?.key || "";
+  };
+
+  const handleWatchTrailer = () => {
+    const key = getTrailerKey();
+    if (key) {
+      setTrailerKey(key);
+      setTrailerOpen(true);
     }
   };
 
@@ -93,11 +111,15 @@ const MovieDetail = () => {
   return (
     <>
       {/* Trailer Modal */}
-      <TrailerModal
-        videoKey={trailerKey}
-        isOpen={showTrailer}
-        onClose={() => setShowTrailer(false)}
-      />
+      {trailerOpen && (
+        <TrailerModal
+          videoKey={trailerKey}
+          onClose={() => {
+            setTrailerOpen(false);
+            setTrailerKey("");
+          }}
+        />
+      )}
 
       <div className="pb-16">
         {/* Hero Section with Backdrop */}
@@ -110,9 +132,9 @@ const MovieDetail = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/70 to-transparent"></div>
 
-            {trailerKey && (
+            {getTrailerKey() && (
               <button
-                onClick={openTrailer}
+                onClick={handleWatchTrailer}
                 className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary/80 text-white transition-transform hover:scale-110"
               >
                 <svg
@@ -148,9 +170,9 @@ const MovieDetail = () => {
                   className="w-full"
                 />
 
-                {trailerKey && (
+                {getTrailerKey() && (
                   <button
-                    onClick={openTrailer}
+                    onClick={handleWatchTrailer}
                     className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 opacity-0 transition-opacity hover:opacity-100"
                   >
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary">
@@ -281,9 +303,9 @@ const MovieDetail = () => {
 
               {/* Action Buttons */}
               <div className="flex flex-wrap gap-4 mb-8">
-                {trailerKey && (
+                {getTrailerKey() && (
                   <button
-                    onClick={openTrailer}
+                    onClick={handleWatchTrailer}
                     className="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-white transition-transform hover:scale-105"
                   >
                     <svg
@@ -383,11 +405,11 @@ const MovieDetail = () => {
                   </div>
                 )}
 
-                {activeTab === "cast" && movie.credits?.cast && (
+                {activeTab === "cast" && credits?.cast && (
                   <div className="animate-fade-in">
                     <h2 className="text-2xl font-semibold mb-4">Cast</h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                      {movie.credits.cast.slice(0, 10).map((person) => (
+                      {credits.cast.slice(0, 10).map((person) => (
                         <div
                           key={person.id}
                           className="bg-gray-800 rounded-lg overflow-hidden transition-transform hover:scale-105"
@@ -421,9 +443,9 @@ const MovieDetail = () => {
                   <div className="animate-fade-in">
                     <h2 className="text-2xl font-semibold mb-4">Videos</h2>
 
-                    {movie.videos && movie.videos.results.length > 0 ? (
+                    {videos && videos.length > 0 ? (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {movie.videos.results.slice(0, 6).map((video) => (
+                        {videos.slice(0, 6).map((video) => (
                           <div
                             key={video.id}
                             className="bg-gray-800 rounded-lg overflow-hidden shadow-lg"
@@ -437,7 +459,7 @@ const MovieDetail = () => {
                               <button
                                 onClick={() => {
                                   setTrailerKey(video.key);
-                                  setShowTrailer(true);
+                                  setTrailerOpen(true);
                                 }}
                                 className="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/60 transition-colors"
                               >

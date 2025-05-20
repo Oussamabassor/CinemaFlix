@@ -17,45 +17,61 @@ const fetchFromAPI = async (endpoint, params = {}) => {
   try {
     const response = await fetch(`${BASE_URL}${endpoint}?${queryParams}`);
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error("API request failed");
     }
     return await response.json();
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error(`Error fetching data from ${endpoint}:`, error);
     throw error;
   }
 };
 
-// Get trending movies
-export const getTrendingMovies = (timeWindow = "day", page = 1) => {
-  return fetchFromAPI(`/trending/movie/${timeWindow}`, { page });
-};
-
-// Get popular movies
+// Get popular movies with pagination
 export const getPopularMovies = (page = 1) => {
-  return fetchFromAPI("/movie/popular", { page });
-};
-
-// Get top rated movies
-export const getTopRatedMovies = (page = 1) => {
-  return fetchFromAPI("/movie/top_rated", { page });
-};
-
-// Get now playing movies
-export const getNowPlayingMovies = (page = 1) => {
-  return fetchFromAPI("/movie/now_playing", { page });
-};
-
-// Get upcoming movies
-export const getUpcomingMovies = (page = 1) => {
-  return fetchFromAPI("/movie/upcoming", { page });
-};
-
-// Get movie details with all needed information
-export const getMovieDetails = (movieId) => {
-  return fetchFromAPI(`/movie/${movieId}`, {
-    append_to_response: "videos,credits,similar,recommendations",
+  return fetchFromAPI("/movie/popular", {
+    page: page,
+    language: "en-US",
   });
+};
+
+// Get movies by genre with pagination
+export const getMoviesByGenre = (genreId, page = 1) => {
+  return fetchFromAPI("/discover/movie", {
+    with_genres: genreId,
+    page: page,
+    sort_by: "popularity.desc",
+    language: "en-US",
+  });
+};
+
+// Get trending movies
+export const getTrendingMovies = (timeWindow = "day") => {
+  return fetchFromAPI(`/trending/movie/${timeWindow}`);
+};
+
+// Get movie details
+export const getMovieDetails = (movieId) => {
+  return fetchFromAPI(`/movie/${movieId}`);
+};
+
+// Get movie credits
+export const getMovieCredits = (movieId) => {
+  return fetchFromAPI(`/movie/${movieId}/credits`);
+};
+
+// Get movie videos
+export const getMovieVideos = (movieId) => {
+  return fetchFromAPI(`/movie/${movieId}/videos`);
+};
+
+// Get similar movies
+export const getSimilarMovies = (movieId) => {
+  return fetchFromAPI(`/movie/${movieId}/similar`);
+};
+
+// Get movie genres
+export const getMovieGenres = () => {
+  return fetchFromAPI("/genre/movie/list");
 };
 
 // Search movies
@@ -63,34 +79,14 @@ export const searchMovies = (query, page = 1) => {
   return fetchFromAPI("/search/movie", { query, page });
 };
 
-// Get movie videos (trailers, teasers, etc.)
-export const getMovieVideos = (movieId) => {
-  return fetchFromAPI(`/movie/${movieId}/videos`);
-};
-
-// Discover movies by genre
-export const discoverMoviesByGenre = (genreId, page = 1) => {
-  return fetchFromAPI("/discover/movie", {
-    with_genres: genreId,
-    page,
-    sort_by: "popularity.desc",
-  });
-};
-
-// Get movie genres list
-export const getMovieGenres = () => {
-  return fetchFromAPI("/genre/movie/list");
-};
-
 export default {
   getTrendingMovies,
   getPopularMovies,
-  getTopRatedMovies,
-  getNowPlayingMovies,
-  getUpcomingMovies,
+  getMoviesByGenre,
   getMovieDetails,
-  searchMovies,
+  getMovieCredits,
   getMovieVideos,
-  discoverMoviesByGenre,
+  getSimilarMovies,
   getMovieGenres,
+  searchMovies,
 };

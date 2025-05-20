@@ -3,13 +3,20 @@ import { Link } from "react-router-dom";
 import ImageLoader from "./ImageLoader";
 
 const MovieCard = ({ movie }) => {
-  const { id, title, poster_path, vote_average, release_date } = movie;
+  const { id, title, vote_average } = movie;
+
+  // Add a fallback mechanism for missing poster images
+  const imagePath = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    : "/placeholder-poster.jpg";
+
+  // Add fallback handling for missing release dates
+  const year = movie.release_date
+    ? new Date(movie.release_date).getFullYear()
+    : "Unknown";
+
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef(null);
-  const year = release_date?.substring(0, 4);
-  const imageUrl = poster_path
-    ? `https://image.tmdb.org/t/p/w500${poster_path}`
-    : "/placeholder.jpg";
 
   // Tilt effect function
   useEffect(() => {
@@ -64,7 +71,7 @@ const MovieCard = ({ movie }) => {
       >
         <div className="aspect-[2/3] w-full overflow-hidden">
           <ImageLoader
-            src={imageUrl}
+            src={imagePath}
             alt={title}
             className={`h-full w-full transform transition-all duration-700 ${
               isHovered ? "scale-110" : "scale-100"

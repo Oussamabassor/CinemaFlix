@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import SearchBar from "./SearchBar"; // Assuming SearchBar is imported
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -27,14 +26,6 @@ const Navbar = () => {
     setIsMenuOpen(false);
   }, [location]);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      // Implement search functionality
-      console.log("Searching for:", searchQuery);
-    }
-  };
-
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Movies", path: "/movies" },
@@ -50,15 +41,15 @@ const Navbar = () => {
           : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto px-4">
+      <div className="container px-4 mx-auto">
         <nav className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link
             to="/"
-            className="text-white text-2xl font-bold flex items-center gap-2"
+            className="flex items-center gap-2 text-2xl font-bold text-white"
           >
             <svg
-              className="h-8 w-8 text-primary"
+              className="w-8 h-8 text-primary"
               viewBox="0 0 24 24"
               fill="currentColor"
             >
@@ -68,7 +59,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="items-center hidden space-x-1 md:flex">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -90,48 +81,14 @@ const Navbar = () => {
           {/* Search and User Controls */}
           <div className="flex items-center gap-4">
             {/* Search Bar */}
-            <form
-              onSubmit={handleSearch}
-              className={`relative hidden md:flex items-center transition-all duration-300 ${
-                isSearchFocused ? "w-64" : "w-48"
-              }`}
-            >
-              <input
-                type="text"
-                placeholder="Search movies..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => setIsSearchFocused(true)}
-                onBlur={() => setIsSearchFocused(false)}
-                className="w-full py-1.5 px-4 pr-10 bg-gray-800/70 rounded-full focus:bg-gray-800 text-sm text-gray-200 focus:ring-2 focus:ring-primary/50 focus:outline-none transition-all"
-              />
-              <button
-                type="submit"
-                className="absolute right-3 text-gray-400 hover:text-white transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </button>
-            </form>
+            <SearchBar variant="navbar" />
 
             {/* User Menu */}
             <div className="relative">
-              <button className="flex items-center justify-center h-9 w-9 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors text-white">
+              <button className="flex items-center justify-center text-white transition-colors bg-gray-800 rounded-full h-9 w-9 hover:bg-gray-700">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
+                  className="w-5 h-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -149,12 +106,12 @@ const Navbar = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden flex items-center justify-center h-9 w-9 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors text-white"
+              className="flex items-center justify-center text-white transition-colors bg-gray-800 rounded-full md:hidden h-9 w-9 hover:bg-gray-700"
             >
               {isMenuOpen ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
+                  className="w-5 h-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -169,7 +126,7 @@ const Navbar = () => {
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
+                  className="w-5 h-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -193,15 +150,15 @@ const Navbar = () => {
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 ease-in-out`}
       >
-        <div className="p-5 h-full overflow-y-auto">
-          <div className="flex justify-between items-center mb-8">
-            <Link to="/" className="text-white text-2xl font-bold">
+        <div className="h-full p-5 overflow-y-auto">
+          <div className="flex items-center justify-between mb-8">
+            <Link to="/" className="text-2xl font-bold text-white">
               CinemaApp
             </Link>
             <button onClick={() => setIsMenuOpen(false)} className="text-white">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className="w-6 h-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -216,36 +173,8 @@ const Navbar = () => {
             </button>
           </div>
 
-          <form onSubmit={handleSearch} className="mb-8">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search movies..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full py-3 px-4 pr-10 bg-gray-800 rounded-lg text-white focus:ring-2 focus:ring-primary/50 focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </form>
+          {/* Search form in mobile menu */}
+          <SearchBar variant="mobile" />
 
           <nav className="space-y-1">
             {navLinks.map((link) => (
@@ -263,11 +192,11 @@ const Navbar = () => {
             ))}
           </nav>
 
-          <div className="mt-8 pt-8 border-t border-gray-800">
-            <button className="flex items-center gap-3 py-3 px-4 text-gray-300 hover:text-white w-full">
+          <div className="pt-8 mt-8 border-t border-gray-800">
+            <button className="flex items-center w-full gap-3 px-4 py-3 text-gray-300 hover:text-white">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className="w-6 h-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

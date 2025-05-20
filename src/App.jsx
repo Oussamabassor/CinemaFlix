@@ -2,12 +2,16 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 // Import animation styles
-import './styles/animations.css';
+import "./styles/animations.css";
 
 // Pages
 import HomePage from "./pages/HomePage";
 import MovieDetail from "./pages/MovieDetail";
 import NotFound from "./pages/NotFound";
+import MoviesPage from "./pages/MoviesPage";
+import TVShowsPage from "./pages/TVShowsPage";
+import CategoriesPage from "./pages/CategoriesPage";
+import SearchResults from "./pages/SearchResults";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -37,7 +41,11 @@ function App() {
         <main className="flex-grow mt-16 md:mt-20">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/movies" element={<MoviesPage />} />
+            <Route path="/tv" element={<TVShowsPage />} />
+            <Route path="/categories" element={<CategoriesPage />} />
             <Route path="/movie/:id" element={<MovieDetail />} />
+            <Route path="/search" element={<SearchResults />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
