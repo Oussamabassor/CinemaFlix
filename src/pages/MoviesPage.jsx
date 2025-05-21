@@ -7,6 +7,7 @@ import {
 } from "../services/api";
 import MovieCard from "../components/MovieCard";
 import LoadingSpinner from "../components/LoadingSpinner";
+import GenreSelector from "../components/GenreSelector";
 
 const MoviesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -54,6 +55,7 @@ const MoviesPage = () => {
           data = await getMoviesByGenre(currentGenre, currentPage);
         }
 
+        console.log(`Received ${data.results?.length} movies from API`); // Debug info
         setMovies(data.results || []);
         setTotalPages(Math.min(data.total_pages || 1, 500)); // TMDB API limits to 500 pages
         setTotalResults(data.total_results || 0);
@@ -105,52 +107,13 @@ const MoviesPage = () => {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-white mb-6">Movies</h1>
 
-      {/* Genre filter - with horizontal scrolling */}
-      <div className="mb-8">
-        <div className="flex items-center gap-2 mb-3">
-          <svg
-            className="w-5 h-5 text-primary"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <h2 className="text-xl font-semibold text-white">Categories</h2>
-        </div>
-
-        <div className="overflow-x-auto pb-3 scrollbar-hide">
-          <div className="flex space-x-2 min-w-max">
-            <button
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                currentGenre === "all"
-                  ? "bg-primary text-white"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
-              onClick={() => handleGenreChange("all")}
-            >
-              All Movies
-            </button>
-
-            {genres.map((genre) => (
-              <button
-                key={genre.id}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                  currentGenre === genre.id.toString()
-                    ? "bg-primary text-white"
-                    : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                }`}
-                onClick={() => handleGenreChange(genre.id.toString())}
-              >
-                {genre.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* Genre filter - with horizontal smooth scrolling */}
+      <GenreSelector
+        genres={genres}
+        selectedGenre={currentGenre}
+        onGenreChange={handleGenreChange}
+        allLabel="All Movies"
+      />
 
       {/* NEW: Results status with view toggle */}
       {!loading && !error && (
@@ -232,11 +195,18 @@ const MoviesPage = () => {
         <>
           {/* UPDATED: Movie grid to display all returned movies */}
           {viewMode === "grid" ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-4 md:gap-5">
-              {movies.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-5">
+                {movies.map((movie) => (
+                  <MovieCard key={movie.id} movie={movie} />
+                ))}
+              </div>
+
+              {/* Movie count indicator */}
+              <div className="mt-4 text-gray-400 text-sm">
+                Showing {movies.length} movies
+              </div>
+            </>
           ) : (
             <div className="space-y-3">
               {movies.map((movie) => (
@@ -244,11 +214,6 @@ const MoviesPage = () => {
               ))}
             </div>
           )}
-
-          {/* Movie count indicator */}
-          <div className="mt-6 text-center text-sm text-gray-500">
-            Showing {movies.length} movies
-          </div>
 
           {/* Enhanced pagination */}
           {totalPages > 1 && (

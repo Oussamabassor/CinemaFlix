@@ -31,6 +31,7 @@ export const getPopularMovies = (page = 1) => {
   return fetchFromAPI("/movie/popular", {
     page: page,
     language: "en-US",
+    include_adult: false,
   });
 };
 
@@ -41,6 +42,7 @@ export const getMoviesByGenre = (genreId, page = 1) => {
     page: page,
     sort_by: "popularity.desc",
     language: "en-US",
+    include_adult: false,
   });
 };
 
@@ -79,6 +81,30 @@ export const searchMovies = (query, page = 1) => {
   return fetchFromAPI("/search/movie", { query, page });
 };
 
+// Get now playing movies
+export const getNowPlayingMovies = (page = 1) => {
+  return fetchFromAPI("/movie/now_playing", {
+    page: page,
+    language: "en-US",
+  });
+};
+
+// Get top-rated movies
+export const getTopRatedMovies = (page = 1) => {
+  return fetchFromAPI("/movie/top_rated", {
+    page: page,
+    language: "en-US",
+  });
+};
+
+// Get upcoming movies
+export const getUpcomingMovies = (page = 1) => {
+  return fetchFromAPI("/movie/upcoming", {
+    page: page,
+    language: "en-US",
+  });
+};
+
 export default {
   getTrendingMovies,
   getPopularMovies,
@@ -89,4 +115,7 @@ export default {
   getSimilarMovies,
   getMovieGenres,
   searchMovies,
+  getNowPlayingMovies,
+  getTopRatedMovies,
+  getUpcomingMovies,
 };

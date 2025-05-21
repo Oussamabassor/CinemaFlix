@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
+import GenreSelector from "../components/GenreSelector";
 
 // Simple TV Shows page as a placeholder
 // You'll need to add TV show endpoints to your API service
 const TVShowsPage = () => {
   const [loading, setLoading] = useState(true);
+  const [genres, setGenres] = useState([]);
+  const [currentGenre, setCurrentGenre] = useState("All TV Shows");
 
   useEffect(() => {
     // Simulate loading
@@ -12,8 +15,15 @@ const TVShowsPage = () => {
       setLoading(false);
     }, 800);
 
+    // Simulate fetching genres
+    setGenres(["Drama", "Comedy", "Action", "Horror", "Sci-Fi"]);
+
     return () => clearTimeout(timer);
   }, []);
+
+  const handleGenreChange = (genre) => {
+    setCurrentGenre(genre);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -30,7 +40,14 @@ const TVShowsPage = () => {
             We're working on bringing you the best TV shows. This section will
             be available soon!
           </p>
-          <div className="inline-flex items-center justify-center gap-2 bg-primary/20 text-primary px-4 py-2 rounded-full">
+          {/* Genre filter - with horizontal smooth scrolling */}
+          <GenreSelector
+            genres={genres}
+            selectedGenre={currentGenre}
+            onGenreChange={handleGenreChange}
+            allLabel="All TV Shows"
+          />
+          <div className="inline-flex items-center justify-center gap-2 bg-primary/20 text-primary px-4 py-2 rounded-full mt-6">
             <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fillRule="evenodd"

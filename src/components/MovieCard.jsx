@@ -56,7 +56,8 @@ const MovieCard = ({ movie }) => {
     };
   }, [isHovered]);
 
-  return (
+  // Make sure the component renders for all valid movies
+  return movie ? (
     <Link
       to={`/movie/${id}`}
       className="block stagger-item"
@@ -136,7 +137,7 @@ const MovieCard = ({ movie }) => {
         />
       </div>
     </Link>
-  );
+  ) : null;
 };
 
 export default MovieCard;
